@@ -22,20 +22,10 @@ app.get('/api', (req, res) => {
   res.json({ message: 'Welcome to the Tasks API! Backend is running and connected to MongoDB.' });
 });
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-  const path = require('path');
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../frontend', 'dist', 'index.html'));
-  });
-} else {
-  // Simple helpful route for dev at root
-  app.get('/', (req, res) => {
-    res.json({ message: 'API is running. In production, this will serve the frontend.' });
-  });
-}
+// Health check route for Railway
+app.get('/', (req, res) => {
+  res.json({ message: 'API is alive and running.' });
+});
 
 // Database connection
 mongoose.connect(process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/tasks-app')
